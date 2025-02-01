@@ -1,0 +1,47 @@
+<!-- res/layout/dialog_save_confirmation.xml -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="20dp"
+    android:background="@drawable/dialog_background"
+    android:gravity="center">
+
+    <!-- Message TextView -->
+    <TextView
+        android:id="@+id/tvMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Do you want to save?"
+        android:textSize="18sp"
+        android:paddingBottom="20dp"
+        android:textAlignment="center" />
+
+    <!-- Buttons Layout -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <!-- Red Cancel Button -->
+        <Button
+            android:id="@+id/btnCancel"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:text="Cancel"
+            android:textColor="#FFFFFF"
+            android:background="@drawable/red_button" />
+
+        <!-- Green Confirm Button -->
+        <Button
+            android:id="@+id/btnSave"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:text="Save"
+            android:textColor="#FFFFFF"
+            android:background="@drawable/green_button"
+            android:layout_marginLeft="20dp"/>
+    </LinearLayout>
+
+</LinearLayout>
