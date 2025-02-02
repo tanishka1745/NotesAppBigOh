@@ -1,5 +1,6 @@
 package com.example.notesapp
 
+import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
@@ -45,20 +46,59 @@ class EditActivity : AppCompatActivity() {
 
         binding.back.setOnClickListener {
             val intent= Intent(this, MainActivity::class.java)
+            startActivity(intent)
         }
-
-
+        binding.delete.setOnClickListener {
+            showDeleteDialog()
+        }
 
     }
 
+    private fun showDeleteDialog() {
+        val dialog = Dialog(this)
+        val dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_delete_confirm, null)
+        dialog.setContentView(dialogView)
+
+        val tvMessage: TextView = dialogView.findViewById(R.id.tvMessage)
+        val btnDelete: Button = dialogView.findViewById(R.id.btnDelete)
+        val btnCancel: Button = dialogView.findViewById(R.id.btnCancel)
+
+        // Set delete confirmation message
+        tvMessage.text = "Are you sure you want to delete this note?"
+
+        // Delete button logic
+        btnDelete.setOnClickListener {
+            deleteNote()  // Your delete function
+            dialog.dismiss()
+        }
+
+        // Cancel button logic
+        btnCancel.setOnClickListener {
+            dialog.dismiss()  // Close dialog
+        }
+
+        // Transparent background
+        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+        dialog.show()
+    }
+
+    private fun deleteNote() {
+        if (noteId != -1) {
+            noteId?.let { noteViewModel.deleteNoteById(it) }
+            Toast.makeText(this, "Note deleted", Toast.LENGTH_SHORT).show()
+            finish() // Close activity and return to main screen
+        }
+    }
+
+    @SuppressLint("MissingInflatedId")
     private fun showSaveDialog() {
         val dialog = Dialog(this)
         val dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_save_confirm, null)
         dialog.setContentView(dialogView)
 
         val tvMessage: TextView = dialogView.findViewById(R.id.tvMessage)
-        val btnSave: Button = dialogView.findViewById(R.id.btnSave)
-        val btnCancel: Button = dialogView.findViewById(R.id.btnCancel)
+        val btnSave: Button = dialogView.findViewById(R.id.btnsave)
+        val btnCancel: Button = dialogView.findViewById(R.id.btncancel)
 
         // Set custom message if needed
         tvMessage.text = "Do you want to save this note?"

@@ -38,7 +38,7 @@
         android:layout_marginEnd="55dp"
         android:layout_marginBottom="128dp"
         android:contentDescription="Add Note"
-        app:backgroundTint="@android:color/black"
+        app:backgroundTint="@android:color/darker_gray"
         app:fabSize="normal"
         app:srcCompat="@android:drawable/ic_input_add"
         app:tint="@android:color/white" />
