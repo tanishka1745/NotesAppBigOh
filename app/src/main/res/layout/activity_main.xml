@@ -2,10 +2,10 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:background="@color/black"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@drawable/notesbg"
     android:layout_height="match_parent"
     android:padding="16dp">
-
 
     <TextView
         android:id="@+id/tvAppName"
@@ -17,12 +17,39 @@
         android:textSize="24sp"
         android:textStyle="bold" />
 
+    <!-- Search Button -->
+    <ImageButton
+        android:id="@+id/infoButton"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:src="@drawable/info"
+        android:background="@drawable/button"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="16dp"
+        android:layout_marginRight="16dp"
+        android:contentDescription="Info"/>
+
+
+    <ImageButton
+        android:id="@+id/searchButton"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:src="@drawable/search"
+    android:background="@drawable/button"
+    android:layout_alignParentTop="true"
+    android:layout_alignParentRight="true"
+    android:layout_marginTop="16dp"
+    android:layout_marginRight="75dp"
+    android:contentDescription="seacrh"/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/tvAppName"
-        android:layout_marginTop="16dp"
+        tools:listitem="@layout/item_note"
+        android:layout_marginTop="25dp"
         android:paddingBottom="80dp" />
 
     <!-- Floating Action Button -->
@@ -30,6 +57,7 @@
         android:id="@+id/add_notes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:elevation="18dp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:layout_margin="16dp"
@@ -44,3 +72,4 @@
         app:tint="@android:color/white" />
 
 </RelativeLayout>
+

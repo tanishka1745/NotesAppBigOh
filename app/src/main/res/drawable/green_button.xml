@@ -2,5 +2,5 @@
 <!-- res/drawable/green_button.xml -->
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
     <solid android:color="#4CAF50"/>
-    <corners android:radius="10dp"/>
+
 </shape>

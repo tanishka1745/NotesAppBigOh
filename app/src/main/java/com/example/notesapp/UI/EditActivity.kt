@@ -1,25 +1,29 @@
-package com.example.notesapp
+package com.example.notesapp.UI
 
-import android.annotation.SuppressLint
 import android.app.Dialog
-import android.content.Intent
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MotionEvent
+import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import com.example.notesapp.R
 import com.example.notesapp.RoomDb.Note
-import com.example.notesapp.UI.MainActivity
 import com.example.notesapp.ViewModels.NoteViewModel
 import com.example.notesapp.databinding.ActivityEditBinding
+
 
 class EditActivity : AppCompatActivity() {
     private lateinit var binding: ActivityEditBinding
     private lateinit var noteViewModel: NoteViewModel
     private var noteId: Int? = null  // Store note ID if editing
+    private var originalTitle: String? = null
+    private var originalContent: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,22 +40,23 @@ class EditActivity : AppCompatActivity() {
         if (noteId != -1) {
             binding.inputNoteTitle.setText(noteTitle)
             binding.inputNote.setText(noteContent)
+            originalTitle = noteTitle
+            originalContent = noteContent
+            binding.preview.visibility = View.VISIBLE
         }
 
         // Save Button Click Listener
-        binding.save
-            .setOnClickListener {
-            showSaveDialog()
+        binding.save.setOnClickListener {
+            saveNote()  // Call saveNote directly
         }
 
         binding.back.setOnClickListener {
-            val intent= Intent(this, MainActivity::class.java)
-            startActivity(intent)
-        }
-        binding.delete.setOnClickListener {
-            showDeleteDialog()
+            finish()  // This will navigate back to the previous activity in the stack
         }
 
+//        binding.delete.setOnClickListener {
+//            showDeleteDialog()
+//        }
     }
 
     private fun showDeleteDialog() {
@@ -90,39 +95,18 @@ class EditActivity : AppCompatActivity() {
         }
     }
 
-    @SuppressLint("MissingInflatedId")
-    private fun showSaveDialog() {
-        val dialog = Dialog(this)
-        val dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_save_confirm, null)
-        dialog.setContentView(dialogView)
-
-        val tvMessage: TextView = dialogView.findViewById(R.id.tvMessage)
-        val btnSave: Button = dialogView.findViewById(R.id.btnsave)
-        val btnCancel: Button = dialogView.findViewById(R.id.btncancel)
-
-        // Set custom message if needed
-        tvMessage.text = "Do you want to save this note?"
-
-        // Save button logic
-        btnSave.setOnClickListener {
-            saveNote()  // Your existing save note function
-            dialog.dismiss()
-        }
-
-        // Cancel button logic
-        btnCancel.setOnClickListener {
-            dialog.dismiss()  // Close dialog without saving
-        }
-
-        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
-        dialog.show()
-    }
-
     private fun saveNote() {
-        val title = binding.inputNoteTitle.text.toString()
-        val content = binding.inputNote.text.toString()
+        var title = binding.inputNoteTitle.text.toString().trim()
+        var content = binding.inputNote.text.toString().trim()
 
-        if (title.isNotEmpty() && content.isNotEmpty()) {
+        // Remove extra white spaces from display
+        title = title.replace("\\s+".toRegex(), " ")
+        content = content.replace("\\s+".toRegex(), " ")
+
+        // Check if there's any update
+        if (title == originalTitle && content == originalContent) {
+            Toast.makeText(this, "No changes made to the note", Toast.LENGTH_SHORT).show()
+        } else if (title.isNotEmpty() && content.isNotEmpty()) {
             if (noteId != -1) {
                 // Update existing note
                 val updatedNote = Note(id = noteId!!, title = title, content = content)
@@ -137,6 +121,15 @@ class EditActivity : AppCompatActivity() {
             Toast.makeText(this, "Title and Content cannot be empty", Toast.LENGTH_SHORT).show()
         }
     }
-
-
+    // when you touch anywhere on the screen keyboard would be disappear
+    override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
+        if (ev?.action == MotionEvent.ACTION_DOWN) {
+            val v = currentFocus
+            if (v != null) {
+                val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.hideSoftInputFromWindow(v.windowToken, 0)
+            }
+        }
+        return super.dispatchTouchEvent(ev)
+    }
 }
